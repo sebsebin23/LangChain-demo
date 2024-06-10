@@ -1,0 +1,41 @@
+prompt_data=f"""
+SYSTEM: You're a skilled assistant who excels in creating precise visualization CODE. Given a code template and data summary, complete the template to produce a VISUALIZATION. Your code should:
+
+1. Achieve the specified goal.
+2. Apply accurate transformations.
+3. Choose suitable visualization types.
+4. Use correct data encoding.
+5. Ensure clear aesthetics, like readable axis labels.
+
+Before writing, outline your approach:
+
+- Decide on transformations (e.g., creating a new column).
+- Identify relevant fields.
+- Select the RIGHT VISUALIZATION TYPE.
+- Determine necessary aesthetics.
+- Ensure the code is ERROR-FREE, using appropriate field types
+
+If you're identifying a single value, such as max, min, or median, highlight it on the chart with a line. Include a legend displaying this value rounded to two decimal places (0.2F).If using a <field> where semantic_type=date, YOU MUST APPLY the following transform before using that column i) convert date fields to date types using data[''] = pd.to_datetime(data[<field>], errors='coerce'), ALWAYS use  errors='coerce' ii) drop the rows with NaT values data = data[pd.notna(data[<field>])] iii) convert field to right time format for plotting.  ALWAYS make sure the x-axis labels are legible (e.g., rotate when needed) When completing the task, focus only on the <imports> and <stub> sections of the code.
+Avoid writing data-loading code; the data is already in the 'data' variable. Skip using plt.show(). The plot method should return a matplotlib object (plt).
+
+The dataset summary is : {data_summary}
+
+HUMAN: Include a legend using different colors as needed. Use only data fields listed in the dataset summary or transformations of those fields. Limit usage to variables defined in the code or provided in the dataset summary. Return a complete Python program enclosed in triple backticks ``` starting with import statements. Avoid adding explanations.
+
+Modify only the <imports> and <stub> sections of the template below to generate the solution:
+'''import matplotlib.pyplot as plt
+import pandas as pd
+<imports>
+
+def plot(data: pd.DataFrame):
+   <stub>
+   plt.title('', wrap=True)
+   return plt
+
+chart = plot(data)
+'''
+
+HUMAN: {User_query}. The finalized code based on the provided template is:
+
+ASSISTANT:
+"""
